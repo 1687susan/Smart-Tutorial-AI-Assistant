@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧補習班 AI 助理系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: #f8f9ff;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #4facfe;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(79, 172, 254, 0.2);
+        }
+        
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .response-area {
+            background: #f8f9ff;
+            border: 1px solid #e0e8ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        
+        .loading {
+            color: #4facfe;
+            font-style: italic;
+        }
+        
+        .architecture {
+            background: #f0f4f8;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .architecture h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .arch-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .arch-item h4 {
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background: #4facfe;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 2px;
+        }
+        
+        .status-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .status-panel h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .status-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .status-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .feature-demo {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            border-left: 3px solid #4facfe;
+        }
+        
+        .feature-demo small {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 智慧補習班 AI 助理系統</h1>
+            <p>結合 .NET + Semantic Kernel + MCP 的智慧協作解決方案</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- 系統狀態展示 -->
+            <div class="status-panel">
+                <h2>🚀 系統狀態</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-icon">👥</div>
+                        <div class="status-info">
+                            <div class="status-number" id="studentCount">3</div>
+                            <div class="status-label">註冊學生</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon">📚</div>
+                        <div class="status-info">
+                            <div class="status-number" id="courseCount">3</div>
+                            <div class="status-label">開設課程</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon">📝</div>
+                        <div class="status-info">
+                            <div class="status-number" id="homeworkCount">3</div>
+                            <div class="status-label">作業項目</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon">🤖</div>
+                        <div class="status-info">
+                            <div class="status-number">AI</div>
+                            <div class="status-label">助理就緒</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🤖 智慧對話系統</h3>
+                    <p>基於 Semantic Kernel 的 AI 助理，能理解學生需求，提供個人化學習指導和作業協助。</p>
+                    <div class="feature-demo">
+                        <small>💬 "我的數學作業有什麼需要注意的地方？"</small>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📚 作業智慧分析</h3>
+                    <p>AI 自動分析學生作業內容，提供建設性回饋和改進建議，協助提升學習效果。</p>
+                    <div class="feature-demo">
+                        <small>📊 自動評分 • 📝 錯誤分析 • 💡 改進建議</small>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎯 個人化推薦</h3>
+                    <p>根據學生年級、學習狀況和興趣偏好，智慧推薦適合的課程和學習計畫。</p>
+                    <div class="feature-demo">
+                        <small>🎓 國三數學 • 📈 85分適合 • ⭐ 推薦指數 95%</small>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔧 MCP 協作平台</h3>
+                    <p>支援 Model Context Protocol，實現多 Agent 協作，與企業系統深度整合。</p>
+                    <div class="feature-demo">
+                        <small>🔗 JSON-RPC 2.0 • 🤝 多 Agent • 🌐 標準協定</small>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>💾 長期記憶管理</h3>
+                    <p>維護學生對話歷史和學習軌跡，提供連續性的個人化服務體驗。</p>
+                    <div class="feature-demo">
+                        <small>🧠 ChatHistory • 📊 學習軌跡 • 🔄 上下文理解</small>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>⚡ 即時互動體驗</h3>
+                    <p>快速回應學生詢問，支援多種互動模式，打造流暢的學習輔助體驗。</p>
+                    <div class="feature-demo">
+                        <small>⚡ 毫秒級回應 • 🎤 語音互動 • 📱 跨平台支援</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h2>🚀 互動式 AI 助理展示</h2>
+                <div class="chat-container">
+                    <div class="input-group">
+                        <label for="studentName">學生姓名</label>
+                        <input type="text" id="studentName" placeholder="請輸入學生姓名（例如：張小明）" value="張小明">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="userMessage">請輸入您的問題</label>
+                        <textarea id="userMessage" rows="3" placeholder="例如：我的數學作業有什麼需要注意的地方？"></textarea>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button class="btn" onclick="sendMessage()">💬 與 AI 助理對話</button>
+                        <button class="btn" onclick="getDailyRecommendation()">📅 取得每日建議</button>
+                        <button class="btn" onclick="getMCPTools()">🛠️ 查看 MCP 工具</button>
+                    </div>
+                    
+                    <div class="response-area" id="responseArea">
+                        點擊上方按鈕開始與 AI 助理互動...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="architecture">
+                <h2>🏗️ 系統架構</h2>
+                <div class="arch-grid">
+                    <div class="arch-item">
+                        <h4>前端層</h4>
+                        <p>React / Blazor</p>
+                        <div>
+                            <span class="tech-badge">HTML5</span>
+                            <span class="tech-badge">CSS3</span>
+                            <span class="tech-badge">JavaScript</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <h4>API 層</h4>
+                        <p>.NET Web API</p>
+                        <div>
+                            <span class="tech-badge">ASP.NET Core</span>
+                            <span class="tech-badge">RESTful API</span>
+                            <span class="tech-badge">Swagger</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <h4>AI 引擎</h4>
+                        <p>Semantic Kernel</p>
+                        <div>
+                            <span class="tech-badge">OpenAI GPT</span>
+                            <span class="tech-badge">Function Calling</span>
+                            <span class="tech-badge">Memory</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <h4>資料層</h4>
+                        <p>Entity Framework</p>
+                        <div>
+                            <span class="tech-badge">SQL Server</span>
+                            <span class="tech-badge">Code First</span>
+                            <span class="tech-badge">LINQ</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <h4>協作層</h4>
+                        <p>MCP Server</p>
+                        <div>
+                            <span class="tech-badge">JSON-RPC</span>
+                            <span class="tech-badge">Multi-Agent</span>
+                            <span class="tech-badge">Tools</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <h4>插件系統</h4>
+                        <p>Custom Plugins</p>
+                        <div>
+                            <span class="tech-badge">Function</span>
+                            <span class="tech-badge">Plugin</span>
+                            <span class="tech-badge">Extensible</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 模擬 API 基礎 URL
+        const BASE_URL = '/api/aiagent';
+        
+        async function sendMessage() {
+            const studentName = document.getElementById('studentName').value.trim();
+            const message = document.getElementById('userMessage').value.trim();
+            const responseArea = document.getElementById('responseArea');
+            
+            if (!studentName || !message) {
+                alert('請填寫學生姓名和問題');
+                return;
+            }
+            
+            responseArea.textContent = '🤖 AI 助理思考中...';
+            responseArea.className = 'response-area loading';
+            
+            try {
+                // 模擬 API 回應
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                const mockResponse = generateMockResponse(message);
+                
+                responseArea.textContent = `AI 助理回覆：\n\n${mockResponse}`;
+                responseArea.className = 'response-area';
+            } catch (error) {
+                responseArea.textContent = `❌ 發生錯誤：${error.message}`;
+                responseArea.className = 'response-area';
+            }
+        }
+        
+        async function getDailyRecommendation() {
+            const studentName = document.getElementById('studentName').value.trim();
+            const responseArea = document.getElementById('responseArea');
+            
+            if (!studentName) {
+                alert('請填寫學生姓名');
+                return;
+            }
+            
+            responseArea.textContent = '📅 生成每日建議中...';
+            responseArea.className = 'response-area loading';
+            
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const recommendation = `📅 ${studentName} 今日學習建議：
+
+🎯 重點學習項目：
+• 複習二次函數的圖形性質
+• 練習三角函數應用題
+
+📝 作業提醒：
+• 三角函數應用作業第6題需要協助
+• 建議複習正弦、餘弦基本性質
+
+💡 複習建議：
+• 建議花 30 分鐘複習昨天的課程內容
+• 可以參考課本 P.45-50 的範例題目
+
+🌟 鼓勵話語：
+繼續保持學習的熱忱！每一步努力都在為未來鋪路。如有任何問題，隨時可以詢問 AI 助理。`;
+                
+                responseArea.textContent = recommendation;
+                responseArea.className = 'response-area';
+            } catch (error) {
+                responseArea.textContent = `❌ 發生錯誤：${error.message}`;
+                responseArea.className = 'response-area';
+            }
+        }
+        
+        async function getMCPTools() {
+            const responseArea = document.getElementById('responseArea');
+            
+            responseArea.textContent = '🛠️ 載入 MCP 工具中...';
+            responseArea.className = 'response-area loading';
+            
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const tools = `🛠️ 可用的 MCP 工具：
+
+1. query_student_homework
+   📝 查詢學生的作業狀況、成績和老師回饋
+
+2. get_student_profile
+   👤 取得學生的基本資料和選課狀況
+
+3. list_courses
+   📚 列出可選修的課程，可依科目篩選
+
+4. recommend_courses
+   🎯 根據學生年級和興趣推薦適合的課程
+
+5. chat_with_student
+   💬 與學生進行智慧對話，提供個人化學習指導
+
+6. analyze_homework
+   🔍 分析學生作業並提供 AI 回饋
+
+這些工具支援 JSON-RPC 2.0 協定，可與其他 AI Agent 系統整合。`;
+                
+                responseArea.textContent = tools;
+                responseArea.className = 'response-area';
+            } catch (error) {
+                responseArea.textContent = `❌ 發生錯誤：${error.message}`;
+                responseArea.className = 'response-area';
+            }
+        }
+        
+        function generateMockResponse(message) {
+            if (message.includes('作業') || message.includes('homework')) {
+                return `我已經查詢了您的作業狀況。根據記錄，您有以下作業：
+
+📚 二次函數練習 - 已評分 (85分)
+老師回饋：計算正確，但要注意圖形標示清楚
+
+📚 三角函數應用 - 已繳交，等待評分
+您提到第6題需要協助，建議複習三角函數基本性質
+
+🎯 學習建議：
+• 加強圖形標示的準確性
+• 可以多練習類似的應用題
+• 如有疑問歡迎隨時詢問
+
+繼續保持用功！您的學習態度很棒 👍`;
+            }
+            
+            if (message.includes('課程') || message.includes('推薦')) {
+                return `根據您的學習狀況，為您推薦以下課程：
+
+📖 國三數學總復習
+👨‍🏫 授課老師：陳老師
+💰 學費：$12,000
+📅 開課日期：2025/01/15
+📍 剩餘名額：5 名
+
+這門課程很適合您目前的程度，特別針對會考重點加強練習。
+建議盡早報名以確保名額！`;
+            }
+            
+            return `您好！我是智慧補習班 AI 助理 🤖
+
+我可以協助您：
+✅ 查詢作業狀況和成績
+✅ 推薦適合的課程  
+✅ 提供個人化學習建議
+✅ 解答學習相關問題
+✅ 分析作業並給予回饋
+
+請告訴我您需要什麼協助？我會根據您的具體情況提供最適合的建議。
+
+💡 提示：您可以問我關於作業、課程推薦、學習方法等任何問題！`;
+        }
+        
+        // 按 Enter 鍵發送訊息
+        document.getElementById('userMessage').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
